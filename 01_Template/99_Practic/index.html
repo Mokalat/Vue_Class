@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="./data.js"></script>
+  <style>
+    main {
+      margin: 0 auto;
+    }
+
+    div {
+      padding: 10px 0;
+      float: left;
+      width: 300px;
+      height: 450px;
+      border: 1px solid black;
+    }
+
+    p {
+      padding: 0 10px;
+      text-align: center;
+    }
+
+    p:nth-child(2) {
+      text-align: left;
+    }
+
+    img {
+      width: 200px;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <main id="app">
+
+    <div v-for="item in jsonData" class="Df">
+      <p> 이름 : {{item.name}}</p>
+      <p> 소개 : {{item.introduction}}</p>
+      <img :src="item.img" alt="Image" />
+    </div>
+  </main>
+  <script>
+    const { createApp, ref } = Vue
+    createApp({
+      setup() {
+        const jsonData = ref(scholar);
+
+        return {
+          jsonData
+        }
+      }
+
+    }).mount("#app");
+  </script>
+</body>
+
+</html>
