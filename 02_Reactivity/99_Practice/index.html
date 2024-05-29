@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="./data.js"></script>
+  <title>Document</title>
+  <style>
+    main {
+      margin: 0 auto;
+    }
+
+    .changeing {
+      padding: 10px 0;
+      float: left;
+      width: 300px;
+      height: 450px;
+      border: 1px solid black;
+    }
+
+    p {
+      padding: 0 10px;
+      text-align: center;
+    }
+
+    p:nth-child(2) {
+      text-align: left;
+    }
+
+    img {
+      width: 200px;
+      height: auto;
+    }
+
+    .imgs_style {
+      width: 100px;
+      height: auto;
+      float: left;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main id="app">
+    <button @click="setToggle">변경</button>
+    <section v-if="character_1 === 'character_1'">
+      <div v-for="item in character" :key="item.name" class="changeing">
+        <p>이름: {{item.name}}</p>
+        <p>소개: {{item.introduction}}</p>
+        <img v-if="item.img" :src="item.img" alt="캐릭터 이미지">
+        <p v-else>이미지 없음</p>
+      </div>
+    </section>
+    <section v-else>
+      <div v-for="item in skill" :key="item.skill" class="changeing">
+        <p>스킬: {{item.skill}}</p>
+        <p>소개: {{item.introduction}}</p>
+        <div v-if="item.imgs && item.imgs.length > 0">
+          <img v-for="img in item.imgs" :src="img" :key="img" alt="스킬 이미지" class="imgs_style">
+        </div>
+        <p v-else>이미지 없음</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    const { createApp, ref } = Vue;
+    createApp({
+      setup() {
+        const character = scholar;
+        const skill = msaSkill;
+        const character_1 = ref("character_1");
+        const count = ref(1);
+
+        function setToggle() {
+          const options = ["character_1", "skill"];
+          const optionIndex = count.value % options.length;
+          character_1.value = options[optionIndex];
+          count.value++;
+        }
+
+        return {
+          character,
+          skill,
+          character_1,
+          setToggle
+        };
+      }
+    }).mount("#app");
+  </script>
+</body>
+
+</html>
