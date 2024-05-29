@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="./data.js"></script>
+  <title>Document</title>
+  <style>
+    main {
+      margin: 0 auto;
+    }
+
+    .changeing {
+      padding: 10px 0;
+      float: left;
+      width: 300px;
+      height: 450px;
+      border: 1px solid black;
+    }
+
+    p {
+      padding: 0 10px;
+      text-align: center;
+    }
+
+    .selec_Box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .selec_Box p {
+      text-align: unset;
+    }
+
+    p:nth-child(2) {
+      text-align: left;
+    }
+
+    img {
+      width: 200px;
+      height: auto;
+    }
+
+    .imgs_style {
+      width: 100px;
+      height: auto;
+      float: left;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main id="app">
+    <button @click="setToggle">변경</button>
+    <button @click="toggleSection3">추가 등록하기</button>
+    <section v-show="showCharacter && !showSection3" class="section1">
+      <div v-for="item in character" :key="item.name" class="changeing">
+        <p>이름: {{item.name}}</p>
+        <p>소개: {{item.introduction}}</p>
+        <img v-if="item.img" :src="item.img" alt="캐릭터 이미지">
+        <p v-else>이미지 없음</p>
+      </div>
+    </section>
+    <section v-show="!showCharacter && !showSection3">
+      <div v-for="item in skill" :key="item.skill" class="changeing">
+        <p>스킬: {{item.skill}}</p>
+        <p>소개: {{item.introduction}}</p>
+        <div v-if="item.imgs && item.imgs.length > 0">
+          <img v-for="img in item.imgs" :src="img" :key="img" alt="스킬 이미지" class="imgs_style">
+        </div>
+        <p v-else>이미지 없음</p>
+      </div>
+    </section>
+    <section v-show="showSection3" class="section3">
+      <div>
+        <select v-model="selectedOption">
+          <option value="character">인물등록</option>
+          <option value="skill">스킬등록</option>
+        </select>
+        <div v-if="selectedOption === 'character'" class="selec_Box">
+          <div class="center">
+            <div>
+              <p>name : {{newCharacter.name}}</p>
+              <input type="text" placeholder="name" v-model="newCharacter.name">
+            </div>
+            <div>
+              <p>introduction : {{newCharacter.introduction}}</p>
+              <input type="text" placeholder="introduction" v-model="newCharacter.introduction">
+            </div>
+            <div>
+              <p>img : {{newCharacter.img}}</p>
+              <input type="text" placeholder="img" v-model="newCharacter.img">
+            </div>
+          </div>
+        </div>
+        <div v-if="selectedOption === 'skill'" class="selec_Box">
+          <div class="center">
+            <div>
+              <p>skill name : {{newSkill.skill}}</p>
+              <input type="text" placeholder="skill name" v-model="newSkill.skill">
+            </div>
+            <div>
+              <p>introduction : {{newSkill.introduction}}</p>
+              <input type="text" placeholder="introduction" v-model="newSkill.introduction">
+            </div>
+            <div>
+              <p>img : {{newSkill.imgs[0]}}</p>
+              <input type="text" placeholder="img" v-model="newSkill.imgs[0]">
+            </div>
+          </div>
+        </div>
+        <button @click="register">등록하기</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const { createApp, ref } = Vue;
+    createApp({
+      setup() {
+        const character = scholar; // 기존 캐릭터 목록
+        const skill = msaSkill; // 기존 스킬 목록
+        const showCharacter = ref(true); // 현재 캐릭터 섹션이 보이는지 여부
+        const showSection3 = ref(false); // 추가 등록 섹션이 보이는지 여부
+        const previousSection = ref(true); // 추가 등록 섹션을 열기 전의 상태를 저장
+        const newCharacter = ref({
+          name: '',
+          introduction: '',
+          img: ''
+        }); // 새로 추가할 캐릭터 정보를 저장
+        const newSkill = ref({
+          skill: '',
+          introduction: '',
+          imgs: ['']
+        }); // 새로 추가할 스킬 정보를 저장
+        const selectedOption = ref('character'); // 선택된 등록 옵션
+
+        // 캐릭터 섹션과 스킬 섹션을 토글하는 함수
+        function setToggle() {
+          showCharacter.value = !showCharacter.value;
+        }
+
+        // 추가 등록 섹션을 토글하는 함수
+        function toggleSection3() {
+          if (!showSection3.value) {
+            // 추가 등록 섹션을 열기 전 현재 상태를 저장
+            previousSection.value = showCharacter.value;
+          }
+          // 추가 등록 섹션을 토글
+          showSection3.value = !showSection3.value;
+          if (!showSection3.value) {
+            // 추가 등록 섹션을 닫을 때 이전 상태로 복원
+            showCharacter.value = previousSection.value;
+          } else {
+            // 추가 등록 섹션을 열 때 캐릭터 섹션을 숨김
+            showCharacter.value = false;
+          }
+        }
+
+        // 새 캐릭터 또는 스킬을 등록하는 함수
+        function register() {
+          if (selectedOption.value === 'character') {
+            if (newCharacter.value.name && newCharacter.value.introduction && newCharacter.value.img) {
+              // 새 캐릭터의 모든 필드가 채워져 있을 때만 등록
+              character.push({ ...newCharacter.value });
+              // 새 캐릭터 입력 필드를 초기화
+              newCharacter.value.name = '';
+              newCharacter.value.introduction = '';
+              newCharacter.value.img = '';
+              // 추가 등록 섹션을 숨기고 이전 섹션 상태로 복귀
+              showSection3.value = false;
+              showCharacter.value = previousSection.value;
+            } else {
+              // 필드가 비어 있을 경우 경고
+              alert('모든 필드를 채워주세요.');
+            }
+          } else if (selectedOption.value === 'skill') {
+            if (newSkill.value.skill && newSkill.value.introduction && newSkill.value.imgs[0]) {
+              // 새 스킬의 모든 필드가 채워져 있을 때만 등록
+              skill.push({ ...newSkill.value });
+              // 새 스킬 입력 필드를 초기화
+              newSkill.value.skill = '';
+              newSkill.value.introduction = '';
+              newSkill.value.imgs = [''];
+              // 추가 등록 섹션을 숨기고 이전 섹션 상태로 복귀
+              showSection3.value = false;
+              showCharacter.value = previousSection.value;
+            } else {
+              // 필드가 비어 있을 경우 경고
+              alert('모든 필드를 채워주세요.');
+            }
+          }
+        }
+
+        return {
+          character,
+          skill,
+          showCharacter,
+          showSection3,
+          newCharacter,
+          newSkill,
+          selectedOption,
+          setToggle,
+          toggleSection3,
+          register
+        };
+      }
+    }).mount("#app");
+  </script>
+</body>
+
+</html>
