@@ -36,9 +36,10 @@ export const useBlogStore = defineStore("blog",()=>{
         fetch(import.meta.env.VITE_API_URL + "/post/"+blog.id, {
             method:"PUT",
             body: JSON.stringify({
-                title : blog.title,
-                content : blog.content,
-                img :blog.img
+                id: blog.id.toString(), // id를 문자열로 변환
+                title: blog.title,
+                content: blog.content,
+                img: blog.img
             })
         }).then(response => response.status)
         .then(result => result == 200? router.push("/") : alert("수정 실패") );
