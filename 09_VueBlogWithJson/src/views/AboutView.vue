@@ -8,7 +8,7 @@
     </p>
     <ol>
       <li>
-        ㄴㄴ Composition API 기반: Pinia는 Vue 3의 Composition API를 사용하여 상태 관리를
+        Composition API 기반: Pinia는 Vue 3의 Composition API를 사용하여 상태 관리를
         구현합니다. 이를 통해 더 직관적이고 유연한 상태 관리를 할 수 있습니다.
       </li>
       <li>
