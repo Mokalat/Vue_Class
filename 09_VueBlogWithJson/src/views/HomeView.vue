@@ -19,4 +19,7 @@ main {
   margin-right: auto;
   border: 1px dotted;
 }
+main {
+  background-color: rgba(255, 163, 163, 0.575);
+}
 </style>

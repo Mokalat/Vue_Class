@@ -114,10 +114,13 @@ textarea {
 }
 
 .imgBox {
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: auto;
 }
-
+.imgBox img {
+  width: 100%;
+  height: auto;
+}
 .imgContainer {
   display: flex;
   flex-direction: column;

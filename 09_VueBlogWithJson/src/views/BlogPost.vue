@@ -19,7 +19,11 @@ const handler = () => {
       <div class="imgContainer">
         <div>
           <label> 이미지 url : </label>
-          <input class="imgInput" v-model="postBlog.img" />
+          <input
+            class="imgInput"
+            v-model="postBlog.img"
+            placeholder="이미지 주소를 넣으세여"
+          />
         </div>
         <template v-if="postBlog.img">
           <img class="imgBox" :src="postBlog.img" />
@@ -35,10 +39,11 @@ const handler = () => {
   flex-direction: column;
   align-items: center;
   width: 70%;
-  height: 700px;
+  height: 100vh;
   border: 1px solid;
   margin-left: auto;
   margin-right: auto;
+  background-color: rgb(238, 153, 153);
 }
 
 .titleContainer {
@@ -80,8 +85,8 @@ textarea {
 }
 
 .imgBox {
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: auto;
 }
 
 .imgContainer {
